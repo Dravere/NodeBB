@@ -26,6 +26,10 @@ module.exports = function (Topics) {
 				Topics.resizeAndUploadThumb(data, next);
 			},
 			function (next) {
+				if (data.tid !== undefined) {
+					next(null, data.tid);
+					return;
+				}
 				db.incrObjectField('global', 'nextTid', next);
 			},
 			function (tid, next) {
