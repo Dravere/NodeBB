@@ -264,6 +264,7 @@ module.exports = function (Topics) {
 				posts.create({
 					uid: uid,
 					tid: tid,
+					pid: data.pid,
 					handle: data.handle,
 					content: content,
 					toPid: data.toPid,
