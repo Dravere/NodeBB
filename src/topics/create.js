@@ -270,6 +270,8 @@ module.exports = function (Topics) {
 					toPid: data.toPid,
 					timestamp: data.timestamp,
 					ip: data.req ? data.req.ip : null,
+					edited: data.edited,
+					editor: data.editor,
 				}, next);
 			},
 			function (_postData, next) {

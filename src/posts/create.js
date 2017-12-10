@@ -49,6 +49,11 @@ module.exports = function (Posts) {
 					deleted: 0,
 				};
 
+				if (data.edited) {
+					postData.edited = data.edited;
+					postData.editor = data.editor;
+				}
+
 				if (data.toPid) {
 					postData.toPid = data.toPid;
 				}
