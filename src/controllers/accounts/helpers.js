@@ -50,11 +50,26 @@ helpers.getUserDataByUserSlug = function (userslug, callerUID, callback) {
 				ips: function (next) {
 					user.getIPs(uid, 4, next);
 				},
-				profile_links: function (next) {
+				profile_links: function (next) { // DEPRECATED, do not use
 					plugins.fireHook('filter:user.profileLinks', [], next);
 				},
 				profile_menu: function (next) {
-					plugins.fireHook('filter:user.profileMenu', { uid: uid, callerUID: callerUID, links: [] }, next);
+					plugins.fireHook('filter:user.profileMenu', {
+						uid: uid,
+						callerUID: callerUID,
+						links: [{
+							id: 'info',
+							route: 'info',
+							name: '[[user:account_info]]',
+							visibility: {
+								self: false,
+								other: false,
+								moderator: true,
+								globalMod: true,
+								admin: true,
+							},
+						}],
+					}, next);
 				},
 				groups: function (next) {
 					groups.getUserGroups([uid], next);
@@ -98,7 +113,7 @@ helpers.getUserDataByUserSlug = function (userslug, callerUID, callback) {
 				userData.fullname = '';
 			}
 
-			if (isAdmin || isSelf || (isGlobalModerator && !results.isTargetAdmin)) {
+			if (isAdmin || isSelf || ((isGlobalModerator || isModerator) && !results.isTargetAdmin)) {
 				userData.ips = results.ips;
 			}
 
@@ -106,7 +121,6 @@ helpers.getUserDataByUserSlug = function (userslug, callerUID, callback) {
 				userData.moderationNote = undefined;
 			}
 
-			userData.uid = userData.uid;
 			userData.yourid = callerUID;
 			userData.theirid = userData.uid;
 			userData.isTargetAdmin = results.isTargetAdmin;
